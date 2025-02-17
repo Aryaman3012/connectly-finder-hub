@@ -3,8 +3,26 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mail } from "lucide-react";
+import { Mail, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+const suggestedFriends = [
+  {
+    name: "Sarah Chen",
+    title: "Product Manager at Google",
+    connections: 12,
+  },
+  {
+    name: "Michael Rodriguez",
+    title: "Software Engineer at Meta",
+    connections: 8,
+  },
+  {
+    name: "Emily Wilson",
+    title: "UX Designer at Apple",
+    connections: 15,
+  },
+];
 
 export const FriendsTab = () => {
   const [email, setEmail] = useState("");
@@ -19,7 +37,7 @@ export const FriendsTab = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-8">
       <Card className="p-6">
         <h3 className="text-lg font-medium mb-4">Invite Friends</h3>
         <div className="space-y-4">
@@ -35,6 +53,29 @@ export const FriendsTab = () => {
           </Button>
         </div>
       </Card>
+
+      <div>
+        <h3 className="text-lg font-medium mb-4">Suggested Connections</h3>
+        <div className="space-y-4">
+          {suggestedFriends.map((friend) => (
+            <Card key={friend.name} className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-medium">{friend.name}</h4>
+                  <p className="text-sm text-muted-foreground">{friend.title}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {friend.connections} mutual connections
+                  </p>
+                </div>
+                <Button variant="outline" size="sm">
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Connect
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
