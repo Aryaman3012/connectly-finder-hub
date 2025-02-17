@@ -1,0 +1,41 @@
+
+# CSV File Requirements
+1. LinkedIn Connections Export Format:
+   - File type: .csv
+   - Required columns:
+     * First Name
+     * Last Name
+     * Email Address
+     * Company
+     * Position
+     * Connected On
+
+2. Custom Contacts Import Format:
+   - File type: .csv
+   - Required columns:
+     * First Name
+     * Last Name
+     * Email
+     * Company
+     * Title
+     * Tags (comma-separated)
+     * Notes
+
+3. File Size Limits:
+   - Maximum file size: 10MB
+   - Maximum rows: 5000 contacts
+
+4. Character Encoding:
+   - UTF-8 encoding required
+   - No special characters in column headers
+
+5. Data Format Guidelines:
+   - Dates should be in YYYY-MM-DD format
+   - Email addresses must be valid format
+   - No empty rows allowed
+   - First row must contain headers
+   
+Sample CSV Format:
+First Name,Last Name,Email,Company,Title,Tags,Notes
+John,Doe,john@example.com,Acme Inc,CEO,tech/startup/investor,Met at TechConf 2023
+Jane,Smith,jane@example.com,Tech Corp,CTO,engineering/ai,Potential advisor
