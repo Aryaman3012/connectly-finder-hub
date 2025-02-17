@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/Header";
 import { TabsSection } from "@/components/TabsSection";
 
-const CLERK_PUBLISHABLE_KEY = process.env.VITE_CLERK_PUBLISHABLE_KEY;
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 function App() {
   return (
