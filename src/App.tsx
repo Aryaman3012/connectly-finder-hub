@@ -1,27 +1,29 @@
+
+import { ClerkProvider } from "@clerk/clerk-react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { Header } from "@/components/Header";
+import { TabsSection } from "@/components/TabsSection";
 
-const queryClient = new QueryClient();
+const CLERK_PUBLISHABLE_KEY = process.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return (
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+      <ThemeProvider defaultTheme="system" storageKey="connectly-theme">
+        <BrowserRouter>
+          <div className="min-h-screen bg-background">
+            <Header />
+            <Routes>
+              <Route path="/" element={<TabsSection />} />
+            </Routes>
+            <Toaster />
+          </div>
+        </BrowserRouter>
+      </ThemeProvider>
+    </ClerkProvider>
+  );
+}
 
 export default App;
