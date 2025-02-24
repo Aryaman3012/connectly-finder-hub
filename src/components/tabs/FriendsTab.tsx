@@ -1,10 +1,10 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Mail, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getPendingFriendRequests, acceptFriendRequest, rejectFriendRequest } from '../../api';
 
 const suggestedFriends = [
   {
@@ -24,9 +24,31 @@ const suggestedFriends = [
   },
 ];
 
+interface PendingRequest {
+  id: string;
+  senderName: string;
+  senderEmail: string;
+  message?: string;
+  createdAt: string;
+}
+
 export const FriendsTab = () => {
   const [email, setEmail] = useState("");
   const { toast } = useToast();
+  const [pendingRequests, setPendingRequests] = useState<PendingRequest[]>([]);
+
+  useEffect(() => {
+    loadPendingRequests();
+  }, []);
+
+  const loadPendingRequests = async () => {
+    try {
+      const requests = await getPendingFriendRequests();
+      setPendingRequests(requests);
+    } catch (error) {
+      console.error('Failed to load pending requests:', error);
+    }
+  };
 
   const handleInvite = () => {
     toast({
@@ -34,6 +56,26 @@ export const FriendsTab = () => {
       description: `An invitation has been sent to ${email}`,
     });
     setEmail("");
+  };
+
+  const handleAccept = async (requestId: string) => {
+    try {
+      await acceptFriendRequest(requestId);
+      // Refresh the pending requests list
+      loadPendingRequests();
+    } catch (error) {
+      console.error('Failed to accept request:', error);
+    }
+  };
+
+  const handleReject = async (requestId: string) => {
+    try {
+      await rejectFriendRequest(requestId);
+      // Refresh the pending requests list
+      loadPendingRequests();
+    } catch (error) {
+      console.error('Failed to reject request:', error);
+    }
   };
 
   return (
@@ -53,6 +95,45 @@ export const FriendsTab = () => {
           </Button>
         </div>
       </Card>
+
+      {/* Pending Friend Requests Section */}
+      {pendingRequests.length > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+          <h2 className="text-lg font-semibold mb-4">Pending Friend Requests</h2>
+          <div className="space-y-4">
+            {pendingRequests.map((request) => (
+              <div 
+                key={request.id} 
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
+                <div>
+                  <h3 className="font-medium">{request.senderName}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{request.senderEmail}</p>
+                  {request.message && (
+                    <p className="text-sm mt-1 text-gray-600 dark:text-gray-300">
+                      "{request.message}"
+                    </p>
+                  )}
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleAccept(request.id)}
+                    className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleReject(request.id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div>
         <h3 className="text-lg font-medium mb-4">Suggested Connections</h3>

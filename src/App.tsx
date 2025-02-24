@@ -1,4 +1,3 @@
-
 import { ClerkProvider, SignIn, SignUp } from "@clerk/clerk-react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -17,7 +16,7 @@ const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 function App() {
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+    <ClerkProvider publishableKey='pk_test_ZG9taW5hbnQtbWFsYW11dGUtNy5jbGVyay5hY2NvdW50cy5kZXYk'>
       <ThemeProvider defaultTheme="system" storageKey="connectly-theme">
         <BrowserRouter>
           <div className="min-h-screen bg-background">
