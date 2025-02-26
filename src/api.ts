@@ -3,7 +3,7 @@ import { API_BASE_URL } from './env.ts';
 
 
 // Search API functions
-export const searchConnections = async (query: string): Promise<{
+export const searchConnections = async (query: string, userId: string): Promise<{
   status: string;
   results: SearchResult[];
   queryId: string;
@@ -13,7 +13,7 @@ export const searchConnections = async (query: string): Promise<{
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ query, user_id: userId }),
     credentials: 'include',
   });
 
