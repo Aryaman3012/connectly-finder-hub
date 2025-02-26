@@ -13,7 +13,7 @@ export const searchConnections = async (query: string, userId: string): Promise<
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query, user_id: userId }),
+    body: JSON.stringify({ query, userId }),
     credentials: 'include',
   });
 
