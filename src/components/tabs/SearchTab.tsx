@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
@@ -14,13 +14,25 @@ import {
 import { searchConnections } from "@/api";
 import { SearchResult } from "@/types";
 import { toast } from "@/components/ui/use-toast";
-import { useUser } from "@clerk/clerk-react";
+import { useUser, useAuth } from "@clerk/clerk-react";
 
 export const SearchTab = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded: isUserLoaded } = useUser();
+  const { userId, getToken, isLoaded: isAuthLoaded } = useAuth();
+
+  // For debugging
+  useEffect(() => {
+    if (isUserLoaded && isAuthLoaded) {
+      console.log("Clerk User ID:", userId);
+      console.log("User object available:", !!user);
+      if (user) {
+        console.log("User ID from user object:", user.id);
+      }
+    }
+  }, [user, userId, isUserLoaded, isAuthLoaded]);
 
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -32,7 +44,7 @@ export const SearchTab = () => {
       return;
     }
 
-    if (!isLoaded || !user) {
+    if (!isUserLoaded || !isAuthLoaded || !userId) {
       toast({
         title: "Authentication Required",
         description: "Please log in to search your network.",
@@ -43,7 +55,10 @@ export const SearchTab = () => {
 
     setIsLoading(true);
     try {
-      const response = await searchConnections(query, user.id);
+      // Use the userId from useAuth which is more reliable
+      console.log("Searching for:", query);
+      console.log("User ID:", userId);
+      const response = await searchConnections(query, userId);
       setResults(response.results);
     } catch (error) {
       toast({
