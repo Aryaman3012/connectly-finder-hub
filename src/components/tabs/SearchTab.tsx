@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
@@ -14,30 +14,13 @@ import {
 import { searchConnections } from "@/api";
 import { SearchResult } from "@/types";
 import { toast } from "@/components/ui/use-toast";
+import { useUser } from "@clerk/clerk-react";
 
 export const SearchTab = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [userId, setUserId] = useState("");
-
-  useEffect(() => {
-    const getCurrentUserId = () => {
-      const storedUserId = localStorage.getItem("userId") || sessionStorage.getItem("userId");
-      if (storedUserId) {
-        setUserId(storedUserId);
-      } else {
-        console.warn("User ID not found. User may need to log in.");
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to search your network.",
-          variant: "destructive",
-        });
-      }
-    };
-    
-    getCurrentUserId();
-  }, []);
+  const { user, isLoaded } = useUser();
 
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -49,10 +32,10 @@ export const SearchTab = () => {
       return;
     }
 
-    if (!userId) {
+    if (!isLoaded || !user) {
       toast({
-        title: "Error",
-        description: "User ID is required for search",
+        title: "Authentication Required",
+        description: "Please log in to search your network.",
         variant: "destructive",
       });
       return;
@@ -60,7 +43,7 @@ export const SearchTab = () => {
 
     setIsLoading(true);
     try {
-      const response = await searchConnections(query, userId);
+      const response = await searchConnections(query, user.id);
       setResults(response.results);
     } catch (error) {
       toast({
