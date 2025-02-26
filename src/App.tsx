@@ -16,7 +16,7 @@ const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 function App() {
   return (
-    <ClerkProvider publishableKey='pk_test_ZG9taW5hbnQtbWFsYW11dGUtNy5jbGVyay5hY2NvdW50cy5kZXYk'>
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
       <ThemeProvider defaultTheme="system" storageKey="connectly-theme">
         <BrowserRouter>
           <div className="min-h-screen bg-background">
