@@ -10,7 +10,7 @@ export const Header = () => {
     <header className="w-full px-6 py-4 border-b glass-card">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-2xl font-semibold text-primary">
-          ConnectlyHub
+          Exsora
         </Link>
         <div className="flex items-center gap-4">
           <Link to="/profile">
