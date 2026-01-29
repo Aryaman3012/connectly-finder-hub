@@ -1,5 +1,3 @@
-
-import { UserButton } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "./ui/button";
@@ -20,7 +18,6 @@ export const Header = () => {
             </Button>
           </Link>
           <ModeToggle />
-          <UserButton afterSignOutUrl="/" />
         </div>
       </div>
     </header>
